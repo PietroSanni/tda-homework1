@@ -3,8 +3,8 @@
 ### Pistone regolatore dell'inclinazione di un piano 
 L'obiettivo del mio progetto è quello di realizzare un meccansimo meccanico composto da un pistone fisso a telaio, che tramite il variare della sua altezza, varia l'angolo di inclinazione di un piano. Quest'ultimo ha un estremo vincolato al pistone e l'altro a telaio, tramite coppie rotoidali.
 
-Schema del meccanismo prototipo `pistone.svg`
-![](pistone.svg)
+Schema del meccanismo prototipo `my-inclinatore.svg`
+![](my-inclinatore.svg)
 
 **Come lavora il programma:**
 1. Si inseriscono i valori delle dimensioni
