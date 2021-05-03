@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600">
+  
+  //Pistone dx
+  <rect  x="105" y="275" width="40" height="200" style="fill:rgb(204,0,0);stroke-width:3;stroke:rgb(0,0,0)" />
+  <rect  x="115" y="175" width="20" height="100" style="fill:rgb(255, 238, 204);stroke-width:3;stroke:rgb(0,0,0)" /> 
+  
+  //Pistone dx
+  <rect  x="562" y="435" width="200" height="40" style="fill:rgb(204,0,0);stroke-width:3;stroke:rgb(0,0,0)" />
+  <rect  x="495" y="445" width="67" height="20" style="fill:rgb(255, 238, 204);stroke-width:3;stroke:rgb(0,0,0)" />
+    
+  //Piano
+  <g transform="rotate(37.5)"> 
+  	<rect  x="185" y="50" width="500" height="25" style="fill:rgb(204,0,0);stroke-width:3;stroke:rgb(0,0,0)" /> </g> 
+      
+  //Guide Prismatiche
+  <circle cx="125" cy="175" r="20" stroke="black" stroke-width="3" fill="#ffaa80" />
+   <circle cx="490" cy="455" r="20" stroke="black" stroke-width="3" fill="#ffaa80" />
+   
+  //MISURE
+  // Base Max
+  <rect x="105" y="490" width="40" height="0.1" style="fill:rgb(217, 217, 217);stroke-width:1;stroke:rgb(217, 217, 217)" />  
+  <text x="115" y="505" fill="#c8c8c8">40</text>
+  
+  // Base Min
+  <rect x="115" y="515" width="20" height="0.1" style="fill:rgb(217, 217, 217);stroke-width:1;stroke:rgb(217, 217, 217)" />  
+  <text x="115" y="530" fill="#c8c8c8">20</text>
+
+   // Lato cilindro esterno
+  <rect x="90" y="275" width="0.1" height="200" style="fill:rgb(217, 217, 217);stroke-width:1;stroke:rgb(217, 217, 217)" />  
+  <text x="60" y="375" fill="#c8c8c8">200</text>
+
+  // Lato cilindro interno
+  <rect x="95" y="175" width="0.1" height="100" style="fill:rgb(217, 217, 217);stroke-width:1;stroke:rgb(217, 217, 217)" />  
+  <text x="65" y="225" fill="#c8c8c8">100</text>
+
+  // Distanza pistone-coppia
+  <rect x="125" y="480" width="365" height="0.1" style="fill:rgb(217, 217, 217);stroke-width:1;stroke:rgb(217, 217, 217)" />  
+  <text x="300" y="505" fill="#c8c8c8">365</text>
+
+  // Lunghezza piano
+  <g transform="rotate(37.5)"> 
+    <rect  x="183" y="30" width="500" height="0.1" style="fill:rgb(217, 217, 217);stroke-width:1;stroke:rgb(217, 217, 217)" />  
+    <text  x="400" y="25" fill="#c8c8c8">500</text> </g>
+    
+  // Pistone dx, base interna
+  <rect x="490" y="490" width="69" height="0.1" style="fill:rgb(217, 217, 217);stroke-width:1;stroke:rgb(217, 217, 217)" />  
+  <text x="518" y="510" fill="#c8c8c8">68</text>
+  
+  // Pistone dx, base esterna
+  <rect x="560" y="500" width="200" height="0.1" style="fill:rgb(217, 217, 217);stroke-width:1;stroke:rgb(217, 217, 217)" />  
+  <text x="650" y="520" fill="#c8c8c8">200</text>
+  
+  </svg>
