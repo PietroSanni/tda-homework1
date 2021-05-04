@@ -10,21 +10,19 @@
 
     /*
     * Definizione dei parametri del componente "pistonesx":
-    * @param posx = posizione x pistonesx;
-    * @param posy = posizione y pistonesx;
+    * @param pos_x_sx = posizione x cilindrosx;
+    * @param pos_y_sx = posizione y cilindrosx;
     * @param h_pi_sx = altezza(corsa) pistone sinistro
     * @param lar_pi_sx = larghezza pistone sinistro
     * @param r_sx = raggio coppia rotoidale sinistra 
     */
     struct PSPistonesx{
 
-        float posx;
-        float posy;
+        float pos_x_sx;
+        float pos_y_sx;
         float h_pi_sx;
         float lar_pi_sx;
-        float r_sx;
     };
-
 
 
     /*
@@ -35,11 +33,14 @@
     struct PSPiano{
     
         float angolo;
+        float raggio;
     };
 
 
     /*
     * Definizione dei parametri del componente "pistonedx":
+    * @param pos_x_dx = posizione x cilindrodx;
+    * @param pos_y_dx = posizione y cilindrodx;
     * @param h_pi_dx = altezza(corsa) pistone destra
     * @param lar_pi_dx = larghezza pistone destra
     * @param r_dx = raggio coppia rotoidale destra 
@@ -48,17 +49,18 @@
     */
     struct PSPistonedx{
 
+        float pos_x_dx;
+        float pos_y_dx;
         float h_pi_dx;
         float lar_pi_dx;
-        float r_dx;
     };
 
 
     struct PSInclinatore{
 
-        PSPistonesx * my_pistonesx;
-        PSPiano * my_piano;
-        PSPistonedx * my_pistonedx;
+        PSPistonesx * pistonesx;
+        PSPiano * piano;
+        PSPistonedx * pistonedx;
     };
 
 
@@ -72,36 +74,38 @@
     /*
      * Funzione che istanzia e inizializza il pistonesx
      */
-    PSPistonesx * pistsx_init(float h_pi_sx, float lar_pi_sx, float r_sx, float posx, float posy);
+    PSPistonesx * pistsx_init(float h_pi_sx, float lar_pi_sx, float pos_x_sx, float pos_y_sx);
 
 
     /*
      * Funzione che istanzia e inizializza il piano
      */
-    PSPiano * piano_init(float angolo); 
+    PSPiano * piano_init(float angolo, float raggio); 
 
 
     /*
      * Funzione che istanzia e inizializza il pistonedx
      */
-    PSPistonedx * pistdx_init(float h_pi_dx, float lar_pi_dx, float r_dx);
+    PSPistonedx * pistdx_init(float h_pi_dx, float lar_pi_dx, float pos_x_dx, float pos_y_dx);
 
     
     /*
      * Di seguito il _set_ di funzioni che permettono di impostare nuovi 
      * parametri rispetto alla strutta PSInclinatore:
      * 
-     * pistone_set_h: funzione che permette di impostare altezza pistoni
+     * pistone_set_h: funzione che permette di impostare altezza(estensione) pistoni
      * pistone_set_lar: funzione che permette di impostare larghezza pistoni
-     * pistone_set_posx: funzione che permette di impostare posizionex pistonesx 
-     * pistone_set_posy: funzione che permette di impostare posizioney pistonesx
+     * pistone_set_pos_x_sx: funzione che permette di impostare posizionex cilindrosx 
+     * pistone_set_posy_y_: funzione che permette di impostare posizioney dei due cilindri
+     * pistone_set_pos_x_dx: funzione che permette di impostare posizionex cilindrodx 
      * pistone_set_r: funzione che permette di impostare raggi coppie rotoidali
      * pistone_set_rad: funzione che permette di impostare l'angolo di inclinazione del piano
     */
     void pistone_set_h(PSInclinatore * inclinatore, float new_param);
     void pistone_set_lar(PSInclinatore * inclinatore, float new_param);
-    void pistone_set_posx(PSInclinatore * inclinatore, float new_param);
-    void pistone_set_posy(PSInclinatore * inclinatore, float new_param);
+    void pistone_set_pos_x_sx(PSInclinatore * inclinatore, float new_param);
+    void pistone_set_pos_y(PSInclinatore * inclinatore, float new_param);
+    void pistone_set_pos_x_dx(PSInclinatore * inclinatore, float new_param);
     void pistone_set_r(PSInclinatore * inclinatore, float new_param);
     void pistone_set_rad(PSInclinatore * inclinatore, float new_param);
 
