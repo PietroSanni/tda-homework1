@@ -1,7 +1,7 @@
 #include "inclinatore.h"
 #include <iostream>
 #include <string.h> 
-#include <cmath>
+#include <math.h>
 #include <fstream>
 #include <streambuf>
 #include <sstream>
