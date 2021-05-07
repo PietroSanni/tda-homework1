@@ -12,17 +12,6 @@
     #define LAYOUT_WIDTH 800
     #define LAYOUT_HEIGHT 600
     
-    /*
-    * Definizione della struttura complessiva "PSInclinatore"
-    */
-    struct PSInclinatore{
-
-        PSCilindro * cilindrosx;
-        PSCilindro * cilindrodx;
-        PSPistone * pistonesx;
-        PSPistone * pistonedx;
-        PSPiano * piano;
-    };
 
     /*
     * Definizione dei parametri del componente "cilindro":
@@ -67,6 +56,19 @@
 
 
     /*
+    * Definizione della struttura complessiva "PSInclinatore"
+    */
+    struct PSInclinatore{
+
+        PSCilindro * cilindrosx;
+        PSCilindro * cilindrodx;
+        PSPistone * pistonesx;
+        PSPistone * pistonedx;
+        PSPiano * piano;
+    };
+
+
+    /*
      * Funzione di inserimento dei parametri
      */
     PSInclinatore * inclinatore_init(float posx_sx, float posy_sx, float lar_pi, float r, float rad);
@@ -79,7 +81,7 @@
     /*
      * Funzione che istanzia e inizializza i componenti "pistone"
      */
-    PSPistone * pistone_init(float lar_pi, float raggio);
+    PSPistone * pistone_init(float lar_pi, float raggio, float estensione);
 
 
     /*

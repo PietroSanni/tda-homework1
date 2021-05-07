@@ -15,12 +15,12 @@ using namespace std;
 
 PSInclinatore * inclinatore_init(float posx_sx, float posy_sx, float lar_pi, float r, float rad){
 
-    float e;
+    float esx, edx;
 
     //calcolo estensione per pistone sx
-    e = sin(rad) - H_CILINDRI - r;
+    esx = sin(rad) - H_CILINDRI - r;
     //calcolo estensione per pistone dx
-    e = DISTANZA_CILINDRI - r - cos(rad);
+    edx = DISTANZA_CILINDRI - r - cos(rad);
 
     //istanza del nuovo inclinatore
     PSInclinatore * new_inclinatore = new PSInclinatore; 
@@ -28,8 +28,8 @@ PSInclinatore * inclinatore_init(float posx_sx, float posy_sx, float lar_pi, flo
     new_inclinatore -> cilindrosx = cilindro_init(posx_sx, posy_sx, H_CILINDRI, LAR_CILINDRI);
     new_inclinatore -> cilindrodx = cilindro_init(posx_sx + LAR_CILINDRI + DISTANZA_CILINDRI, posx_sx, LAR_CILINDRI, H_CILINDRI);
     
-    new_inclinatore -> pistonesx = pistone_init(lar_pi, r, e);
-    new_inclinatore -> pistonedx = pistone_init(lar_pi, r, e);
+    new_inclinatore -> pistonesx = pistone_init(lar_pi, r, esx);
+    new_inclinatore -> pistonedx = pistone_init(lar_pi, r, edx);
 
     new_inclinatore -> piano = piano_init(rad, L_PIANO, SPESSORE);
  
