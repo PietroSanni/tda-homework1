@@ -1,6 +1,15 @@
 {
+<<<<<<< HEAD
     "files.associations": {
         "iostream": "cpp",
         "vector": "cpp"
+=======
+    "cmake.configureOnOpen": true,
+    "files.associations": {
+        "ostream": "cpp",
+        "iostream": "cpp",
+        "new": "cpp",
+        "algorithm": "cpp"
+>>>>>>> test
     }
 }
