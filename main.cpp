@@ -20,7 +20,11 @@ int main() {
     
     stampa_dati (myinclinatore);
 
+
     //costruzione svg
+    string NameFile = "";
+    cout << "Inserire il nome del file .svg che verrà creato: "; cin >> NameFile;
+    
 
     cout<<"Funziona il programma"<<endl;
 

@@ -96,58 +96,41 @@
  
     /*
      * Di seguito il _set_ di funzioni che permettono di impostare nuovi 
-     * parametri rispetto alla strutta PSInclinatore:
-     * 
-     * pistone_set_h: funzione che permette di impostare altezza(estensione) pistoni
-     * pistone_set_lar: funzione che permette di impostare larghezza pistoni
-     * pistone_set_pos_x_sx: funzione che permette di impostare posizionex cilindrosx 
-     * pistone_set_posy_y: funzione che permette di impostare posizioney dei due cilindri
-     * pistone_set_pos_x_dx: funzione che permette di impostare posizionex cilindrodx 
-     * pistone_set_r: funzione che permette di impostare raggi coppie rotoidali
-     * pistone_set_rad: funzione che permette di impostare l'angolo di inclinazione del piano
-    * /
-    void pistone_set_h(PSInclinatore * inclinatore, float new_param);
-    void pistone_set_lar(PSInclinatore * inclinatore, float new_param);
-    void pistone_set_pos_x_sx(PSInclinatore * inclinatore, float new_param);
-    void pistone_set_pos_y(PSInclinatore * inclinatore, float new_param);
-    void pistone_set_pos_x_dx(PSInclinatore * inclinatore, float new_param);
-    void pistone_set_r(PSInclinatore * inclinatore, float new_param);
-    void pistone_set_rad(PSInclinatore * inclinatore, float new_param);
-*/
-
-    /*
-     * Di seguito il _set_ di funzioni che permettono di impostare nuovi 
      * parametri rispetto alla struttura PSInclinatore:
      * 
      * set_larghezza_pistone: Larghezza Pistone generico
-     * 
-     * 
-     * set_estensione_pistonesx: funzione che permette di regolare l'estensione del pistone (in funz. dell'angolo)
-     *
-     * 
+     * set_larghezza_pistoni: Modifica il valore della larghezza dei due pistoni
+     * set_raggio: Raggio coppie rotoidali generico
+     * set_raggi: Modifico il valore del raggio delle due coppie rotoidali
+     * set_posizioney_cilindro: Modifico posizioney del cilindro
+     * set_posizionex_cilindro: Modifico posizionex del cilindro
+     * set_angolo: Angolo di inclinazione piano
      */
     void set_larghezza_pistone (PSPistone * pistone, float new_param);
-
-
-    void set_estensione_pistonesx (PSInclinatore * pistsx, float new_param);
-    void set_estensione_pistonedx (PSInclinatore * pistdx, float new_param);
-
-
-    /*
-     * Funzione che controlla che i parametri inseriti siano coerenti fisicamente,
-     * quindi che i parametri inseriti siano positivi e diversi da zero.
-     * Qualora fosse necessario viene chiamata una delle
-     * funzioni _set_ che permette di modificare il parametro.
-     */
-    int controllo_dati(PSInclinatore * inclinatore);
+    void set_larghezza_pistoni (PSInclinatore * inclinatore, float new_param);
+    void set_raggio (PSPistone * pistone, float new_param);
+    void set_raggi (PSInclinatore * inclinatore, float new_param);
+    void set_posizioney_cilindro(PSCilindro * cilindro, float new_param);
+    void set_posizionex_cilindro(PSCilindro * cilindro, float new_param);
+    void set_angolo (PSPiano * pian, float new_param);
 
 
     /*
-     * Funzione che controlla che i parametri inseriti siano coerenti fisicamente.
+     * Funzione che controlla che i parametri inseriti siano positivi e diversi da zero.
      * Qualora fosse necessario viene chiamata una delle
      * funzioni _set_ che permette di modificare il parametro.
      */
-    int coerenza_dati(PSInclinatore * inclinatore);
+    int controllo_dati (PSInclinatore * inclinatore);
+
+
+    /*
+     * Funzione che controlla che i parametri inseriti siano coerenti fisicamente:
+     * - larghezza pistone < larghezza cilindro
+     * - controlla che il device sia contenuto nel layout in direzione y
+     * Qualora fosse necessario viene chiamata una delle
+     * funzioni _set_ che permette di modificare il parametro.
+     */
+    int coerenza_dati (PSInclinatore * inclinatore);
 
 
     /*
@@ -158,18 +141,17 @@
 
     /*
      * Funzione che converte l'oggetto "PSInclinatore" in una stringa di codice SVG
-     * 
-     * @param vedi_misure (opzionale): permette di scegliere 
-     * se visualizzare o meno le dimensioni  sul disegno
+            * 
+            * @param vedi_misure (opzionale): permette di scegliere 
+            * se visualizzare o meno le dimensioni  sul disegno
      * /
     std::string inclinatore_to_SVGstring(PSInclinatore * inclinatore, bool vedi_misure = false);  
 
 
     /*
      * Dato il nome del file dall'utente, la funzione realizza il file .svg
-     * 
-     * 
-    void inclinatore_to_svg (PSInclinatore * inclinatore, std::string fileName, bool vedi_misure = false);
+     */ 
+    void inclinatore_to_svg (PSInclinatore * inclinatore, std::string fileName);
 
 
     /*
