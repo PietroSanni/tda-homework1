@@ -8,11 +8,13 @@
     #define H_CILINDRI  200
     #define L_PIANO  500
     #define SPESSORE  20
+    #define DISTANZA_CILINDRI 480
     #define LAYOUT_WIDTH 800
     #define LAYOUT_HEIGHT 600
-    #define DISTANZA_CILINDRI 480
-
-
+    
+    /*
+    * Definizione della struttura complessiva "PSInclinatore"
+    */
     struct PSInclinatore{
 
         PSCilindro * cilindrosx;
@@ -61,41 +63,39 @@
         float angolo;
         float spes;
         float l;
-
     };
 
 
     /*
-     * Funzione che permette di creare da terminale il mio device, l'inclinatore
-     * @return inclinatore risultante dall'operazione
-     */
- //   PSInclinatore * inclinatore_crea();
-
- 
-    /*
      * Funzione di inserimento dei parametri
      */
-    PSInclinatore * inclinatore_init(float posx_sx, float posy_sx, float h_ci, float lar_ci, float est_sx, float est_dx, float lar_pi, float r, float rad, float l, float spes, float posx_dx, float posy_dx);
-    
+    PSInclinatore * inclinatore_init(float posx_sx, float posy_sx, float lar_pi, float r, float rad){
+
 
     /*
-     * Funzione che istanzia e inizializza i pistoni
+     * Funzione che istanzia e inizializza i componenti "cilindro"
      */
     PSCilindro * cilindro_init(float posx, float posy, float h_ci, float lar_ci);
 
 
     /*
-     * Funzione che istanzia e inizializza i pistoni
+     * Funzione che istanzia e inizializza i componenti "pistone"
      */
     PSPistone * pistone_init(float lar_pi, float raggio);
 
 
     /*
-     * Funzione che istanzia e inizializza il piano
+     * Funzione che istanzia e inizializza il componente "piano"
      */
     PSPiano * piano_init(float rad, float spessore, float lunghezza); 
 
-    
+    /*
+     * Funzione che permette di creare da terminale il mio device, l'inclinatore
+     * @return inclinatore risultante dall'operazione
+     */
+    PSInclinatore * inclinatore_input();
+
+ 
     /*
      * Di seguito il _set_ di funzioni che permettono di impostare nuovi 
      * parametri rispetto alla strutta PSInclinatore:
@@ -117,7 +117,16 @@
     void pistone_set_rad(PSInclinatore * inclinatore, float new_param);
 */
 
-void set_estensione_pistonesx(PSInclinatore * pippo, float new_param);
+    /*
+     * Di seguito il _set_ di funzioni che permettono di impostare nuovi 
+     * parametri rispetto alla struttura PSInclinatore:
+     * 
+     * set_estensione_pistonesx: funzione che permette di regolare l'estensione del pistone (in funz. dell'angolo)
+     *
+     * 
+     */
+    void set_estensione_pistonesx (PSInclinatore * pistsx, float new_param);
+    void set_estensione_pistonedx (PSInclinatore * pistdx, float new_param);
 
 
     /*
@@ -125,12 +134,20 @@ void set_estensione_pistonesx(PSInclinatore * pippo, float new_param);
      * quindi che i parametri inseriti siano positivi e diversi da zero.
      * Qualora fosse necessario viene chiamata una delle
      * funzioni _set_ che permette di modificare il parametro.
-     * /
+     */
     int controllo_dati(PSInclinatore * inclinatore);
 
 
     /*
-     * Funzione che permette di visualizzare a schermo i dati sul device "inclinatore"
+     * Funzione che controlla che i parametri inseriti siano coerenti fisicamente.
+     * Qualora fosse necessario viene chiamata una delle
+     * funzioni _set_ che permette di modificare il parametro.
+     */
+    int coerenza_dati(PSInclinatore * inclinatore);
+
+
+    /*
+     * Funzione che permette di visualizzare a schermo i dati dei parametri
      */    
     void stampa_dati (PSInclinatore * inclinatore);
 
