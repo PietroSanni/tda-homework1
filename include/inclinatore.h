@@ -69,14 +69,12 @@
     /*
      * Funzione di inserimento dei parametri
      */
-    PSInclinatore * inclinatore_init(float posx_sx, float posy_sx, float lar_pi, float r, float rad){
-
+    PSInclinatore * inclinatore_init(float posx_sx, float posy_sx, float lar_pi, float r, float rad);
 
     /*
      * Funzione che istanzia e inizializza i componenti "cilindro"
      */
     PSCilindro * cilindro_init(float posx, float posy, float h_ci, float lar_ci);
-
 
     /*
      * Funzione che istanzia e inizializza i componenti "pistone"
@@ -121,10 +119,16 @@
      * Di seguito il _set_ di funzioni che permettono di impostare nuovi 
      * parametri rispetto alla struttura PSInclinatore:
      * 
+     * set_larghezza_pistone: Larghezza Pistone generico
+     * 
+     * 
      * set_estensione_pistonesx: funzione che permette di regolare l'estensione del pistone (in funz. dell'angolo)
      *
      * 
      */
+    void set_larghezza_pistone (PSPistone * pistone, float new_param);
+
+
     void set_estensione_pistonesx (PSInclinatore * pistsx, float new_param);
     void set_estensione_pistonedx (PSInclinatore * pistdx, float new_param);
 

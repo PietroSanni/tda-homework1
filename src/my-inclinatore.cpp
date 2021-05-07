@@ -1,14 +1,14 @@
 #include "inclinatore.h"
 #include <iostream>
 #include <string.h> 
+#include <string>
 #include <math.h>
+#include <cmath>
 #include <fstream>
 #include <streambuf>
 #include <sstream>
 #include <algorithm>
 #include <vector>
-#include <string>
-#include <cmath>
 
 using namespace std;
 
@@ -93,7 +93,7 @@ PSInclinatore * inclinatore_input(){
 
 
 /*
-* SET di funzioni che calcolano i valori dei parametri restanti:
+* SET di funzioni che permettono di impostare nuovi parametri:
 */
 //Larghezza Pistone generico 
 void set_larghezza_pistone (PSPistone * pistone, float new_param){
@@ -240,17 +240,17 @@ string inclinatore_to_svg (PSInclinatore * inc){
     float ipo, alpha, gamma;
 
     //Cilindro di sinistra
-    str += "<rect  x=\"" + to_string(inc-> cilindrosx-> pos_x) + "\" y=\"" + to_string(inc-> cilindrosx-> pos_y) + "\" width=\"" + to_string(inc-> cilindrosx-> lar) + "\" height=\"" + to_string(inc-> cilindrosx-> h) +  "\" style=\"fill:rgb(200,200,200);stroke-width:3;stroke:rgb(0,0,0)\" /> \n";
+    str += "<rect  x=\"" + to_string(inc-> cilindrosx-> pos_x) + "\" y=\"" + to_string(inc-> cilindrosx-> pos_y) + "\" width=\"" + to_string(inc-> cilindrosx-> lar) + "\" height=\"" + to_string(inc-> cilindrosx-> h) +  "\" style=\"fill:rgb(204,0,0);stroke-width:3;stroke:rgb(0,0,0)\" /> \n";
     
     //Pistone di sinistra
     x = inc-> cilindrosx-> pos_x + (inc-> cilindrosx-> lar - inc-> pistonesx-> lar) / 2;
     y = inc-> cilindrosx-> pos_y - inc-> cilindrosx-> h;
-    str += "<rect  x=\"" + to_string(x) + "\" y=\"" + to_string(y) + "\" width=\"" + to_string(inc-> pistonesx-> lar) + "\" height=\"" + to_string(inc-> pistonesx-> est) +  "\" style=\"fill:rgb(0,200,0);stroke-width:3;stroke:rgb(0,0,0)\" /> \n";
+    str += "<rect  x=\"" + to_string(x) + "\" y=\"" + to_string(y) + "\" width=\"" + to_string(inc-> pistonesx-> lar) + "\" height=\"" + to_string(inc-> pistonesx-> est) +  "\" style=\"fill:rgb(255, 238, 204);stroke-width:3;stroke:rgb(0,0,0)\" /> \n";
     
     // Coppia rotoidale sx
     x = x + inc-> pistonesx-> lar / 2;
     y = y - inc-> pistonesx-> est - inc-> pistonesx-> r;
-    str += "<circle cx=\"" + to_string(x) + "\" cy=\"" + to_string(y) + "\" r=\"" + to_string(inc-> pistonesx-> r) + "\" stroke=\"black\" stroke-width=\"3\" fill=\"lightgrey\" /> \n";
+    str += "<circle cx=\"" + to_string(x) + "\" cy=\"" + to_string(y) + "\" r=\"" + to_string(inc-> pistonesx-> r) + "\" stroke=\"black\" stroke-width=\"3\" fill=\"ffaa80\" /> \n";
     
 
     // Piano:
@@ -259,23 +259,23 @@ string inclinatore_to_svg (PSInclinatore * inc){
     gamma = 90 - alpha - inc-> pistonesx-> r;
     x = x + ipo * sin (gamma);
     y = y - ipo * cos (gamma);
-    str += "<g transform=\"rotate(" + to_string(inc-> piano-> angolo) + "," + to_string(mylivella->mypiston1->pos_cx) + "," + to_string(mylivella->mypiston1->pos_cy) + ")\"> \n";
-    str += "<rect  x=\"" + to_string(mylivella->myplate->pos_x) + "\" y=\"" + to_string(mylivella->myplate->pos_y) + "\" width=\"" + to_string(mylivella->myplate->lunghezza) + "\" height=\"" + to_string(mylivella->myplate->spessore) + "\" style=\"fill:rgb(0,120,0);stroke-width:3;stroke:rgb(200,200,200)\" /> \n";
+    str += "<g transform=\"rotate(" + to_string(inc-> piano-> angolo) + ")\"> \n";
+    str += "<rect  x=\"" + to_string(x) + "\" y=\"" + to_string(y) + "\" width=\"" + to_string(inc-> piano -> l) + "\" height=\"" + to_string(inc-> piano -> spes) + "\" style=\"fill:rgb(204,0,0);stroke-width:3;stroke:rgb(204,0,0)\" /> \n";
     str += "</g> \n";
 
 
     //Cilindro di destra
-    str += "<rect  x=\"" + to_string(inc-> cilindrodx-> pos_x) + "\" y=\"" + to_string(inc-> cilindrodx-> pos_y) + "\" width=\"" + to_string(inc-> cilindrodx-> lar) + "\" height=\"" + to_string(inc-> cilindrodx-> h) +  "\" style=\"fill:rgb(200,200,200);stroke-width:3;stroke:rgb(0,0,0)\" /> \n";
+    str += "<rect  x=\"" + to_string(inc-> cilindrodx-> pos_x) + "\" y=\"" + to_string(inc-> cilindrodx-> pos_y) + "\" width=\"" + to_string(inc-> cilindrodx-> lar) + "\" height=\"" + to_string(inc-> cilindrodx-> h) +  "\" style=\"fill:rgb(204,0,0);stroke-width:3;stroke:rgb(0,0,0)\" /> \n";
     
     //Pistone di destra
     x = inc-> cilindrodx-> pos_x - inc-> pistonedx-> est;
     y = inc-> cilindrodx-> pos_y - (inc-> cilindrodx-> h - inc-> pistonedx-> lar) / 2;
-    str += "<rect  x=\"" + to_string(x) + "\" y=\"" + to_string(y) + "\" width=\"" + to_string(inc-> pistonedx-> est) + "\" height=\"" + to_string(inc-> pistonedx-> lar) +  "\" style=\"fill:rgb(0,200,0);stroke-width:3;stroke:rgb(0,0,0)\" /> \n";
+    str += "<rect  x=\"" + to_string(x) + "\" y=\"" + to_string(y) + "\" width=\"" + to_string(inc-> pistonedx-> est) + "\" height=\"" + to_string(inc-> pistonedx-> lar) +  "\" style=\"fill:rgb(255, 238, 204);stroke-width:3;stroke:rgb(0,0,0)\" /> \n";
 
     // Coppia rotoidale dx
     x = x - inc-> pistonedx-> r;
     y = y - inc-> pistonedx-> lar / 2;
-    str += "<circle cx=\"" + to_string(x) + "\" cy=\"" + to_string(y) + "\" r=\"" + to_string(inc-> pistonedx-> r) + "\" stroke=\"black\" stroke-width=\"3\" fill=\"lightgrey\" /> \n";
+    str += "<circle cx=\"" + to_string(x) + "\" cy=\"" + to_string(y) + "\" r=\"" + to_string(inc-> pistonedx-> r) + "\" stroke=\"black\" stroke-width=\"3\" fill=\"ffaa80\" /> \n";
     
 
 
