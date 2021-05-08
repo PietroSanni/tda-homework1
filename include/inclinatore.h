@@ -8,7 +8,7 @@
     #define H_CILINDRI  200
     #define L_PIANO  500
     #define SPESSORE  20
-    #define DISTANZA_CILINDRI 480
+    #define DISTANZA_CILINDRI 440
     #define LAYOUT_WIDTH 800
     #define LAYOUT_HEIGHT 600
     
@@ -81,7 +81,7 @@
     /*
      * Funzione che istanzia e inizializza i componenti "pistone"
      */
-    PSPistone * pistone_init(float lar_pi, float raggio, float estensione);
+    PSPistone * pistone_init(float lar_pi, float raggio);
 
 
     /*
@@ -115,7 +115,7 @@
     void set_posizioney_cilindro(PSCilindro * cilindro, float new_param);
     void set_posizionex_cilindro(PSCilindro * cilindro, float new_param);
     void set_angolo (PSPiano * pian, float new_param);
-
+    void set_estensione(PSPistone * pist, float new_param);
 
     /*
      * Funzione che controlla che i parametri inseriti siano positivi e diversi da zero.
@@ -142,31 +142,21 @@
 
 
     /*
-     * Funzione che converte l'oggetto "PSInclinatore" in una stringa di codice SVG
-            * 
-            * @param vedi_misure (opzionale): permette di scegliere 
-            * se visualizzare o meno le dimensioni  sul disegno
-     * /
-    std::string inclinatore_to_SVGstring(PSInclinatore * inclinatore, bool vedi_misure = false);  
-
-
-    /*
-     * Dato il nome del file dall'utente, la funzione realizza il file .svg
+     * Dato il nome del file dall'utente, la funzione realizza la stringa svg
      */ 
-    void inclinatore_to_svg (PSInclinatore * inclinatore, std::string fileName);
+    std::string inclinatore_to_stringasvg (PSInclinatore * inc);
 
 
     /*
-     * Funzione che permette di implementare le misure all'interno del file svg
-     * 
-     * /
-    std::string inclinatore_to_MisureSVG (PSInclinatore * inclinatore);
+     * Dato il nome del file dall'utente, la funzione realizza la stringa svg
+     */ 
+    void inclinatore_to_svg (PSInclinatore * inc);
 
 
     /*
      * Funzione che permette di deallocare correttamente struct e istanze
-     * /
-    void inclinatore_cancella (PSInclinatore * inclinatore);
-    */
+     */
+    void inclinatore_destroy (PSInclinatore * inclinatore);
+    
 
 #endif

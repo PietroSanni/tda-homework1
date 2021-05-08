@@ -15,21 +15,14 @@ using namespace std;
 
 PSInclinatore * inclinatore_init(float posx_sx, float posy_sx, float lar_pi, float r, float rad){
 
-    float esx, edx;
-
-    //calcolo estensione per pistone sx
-    esx = sin(rad) - H_CILINDRI - r;
-    //calcolo estensione per pistone dx
-    edx = DISTANZA_CILINDRI - r - cos(rad);
-
     //istanza del nuovo inclinatore
     PSInclinatore * new_inclinatore = new PSInclinatore; 
 
     new_inclinatore -> cilindrosx = cilindro_init(posx_sx, posy_sx, H_CILINDRI, LAR_CILINDRI);
-    new_inclinatore -> cilindrodx = cilindro_init(posx_sx + LAR_CILINDRI + DISTANZA_CILINDRI, posx_sx, LAR_CILINDRI, H_CILINDRI);
+    new_inclinatore -> cilindrodx = cilindro_init(posx_sx + LAR_CILINDRI + DISTANZA_CILINDRI, posy_sx, LAR_CILINDRI, H_CILINDRI);
     
-    new_inclinatore -> pistonesx = pistone_init(lar_pi, r, esx);
-    new_inclinatore -> pistonedx = pistone_init(lar_pi, r, edx);
+    new_inclinatore -> pistonesx = pistone_init(lar_pi, r);
+    new_inclinatore -> pistonedx = pistone_init(lar_pi, r);
 
     new_inclinatore -> piano = piano_init(rad, L_PIANO, SPESSORE);
  
@@ -54,7 +47,7 @@ PSCilindro * cilindro_init(float posx, float posy, float h_ci, float lar_ci) {
 
 
 // Inizializzazione dei parametri dei pistoni
-PSPistone * pistone_init(float lar_pi, float raggio, float pippo) {
+PSPistone * pistone_init(float lar_pi, float raggio) {
 
     PSPistone * new_pistone = new PSPistone;
 
@@ -62,8 +55,7 @@ PSPistone * pistone_init(float lar_pi, float raggio, float pippo) {
     new_pistone-> lar = lar_pi;
     //Dimensioni raggio coppia 
     new_pistone-> r = raggio; 
-    new_pistone-> est = pippo;   
-   
+    
     return new_pistone;
 }
 
@@ -85,11 +77,15 @@ PSInclinatore * inclinatore_input(){
 
     float posx_sx, posy_sx, h_ci, lar_ci, lar_pi, r, rad, l, spes, posx_dx, posy_dx;
     
-    cout << "Crea l'inclinatore inserendo i vari parametri richiesti:" << endl;
-    cout << "Inserire posizione (x,y) del cilindro sx:"; cin >> posx_sx >> posy_sx;
-    cout << "Inserire larghezza dei pistoni sx e dx:"; cin >> lar_pi;
-    cout << "Inserire raggio delle coppie rotoidali:"; cin >> r;
-    cout << "Inserire l'angolo di inclinazione:"; cin >> rad;
+    cout << endl << endl;
+    cout << "CREA L'INCLINATORE" << endl;
+    cout << "Inserire posizione x del cilindro sx:   "; cin >> posx_sx;
+    cout << "Inserire posizione y del cilindro sx:   "; cin >> posy_sx;
+    cout << "Inserire larghezza dei pistoni sx e dx: "; cin >> lar_pi;
+    cout << "Inserire raggio delle coppie rotoidali: "; cin >> r;
+    cout << "Inserire l'angolo di inclinazione:      "; cin >> rad;
+
+    cout << endl;
 
     return inclinatore_init(posx_sx, posy_sx, lar_pi, r, rad);
 }
@@ -123,6 +119,11 @@ void set_raggi (PSInclinatore * inclinatore, float new_param){
         set_raggio (inclinatore-> pistonesx, new_param);
         set_raggio (inclinatore-> pistonedx, new_param);
 }
+
+//Modifico il valore dell'estensione del pistone
+void set_estensione(PSPistone * pist, float new_param){
+    pist -> est = new_param;
+} 
 
 //Modifico posizioney del cilindro
 void set_posizioney_cilindro(PSCilindro * cilindro, float new_param){
@@ -161,36 +162,36 @@ int controllo_dati(PSInclinatore * inclinatore){
         cin >> new_param;
         set_angolo(inclinatore-> piano, new_param);  
     }
+
+    float esx, edx;
+    //calcolo estensione per pistone sx
+    esx = L_PIANO * sin(inclinatore-> piano-> angolo) - H_CILINDRI - inclinatore-> pistonesx-> r;
+    //calcolo estensione per pistone dx
+    edx = DISTANZA_CILINDRI - (LAR_CILINDRI / 2) - inclinatore-> pistonedx-> r - (L_PIANO * cos(inclinatore-> piano-> angolo));
+    set_estensione(inclinatore-> pistonesx, esx);
+    set_estensione(inclinatore-> pistonedx, edx);
 }
 
 
 
 // Controllo della coerenza tra i parametri inseriti
-
 int coerenza_dati(PSInclinatore * inclinatore){
 
     float new_param;
     float altezza_device;
     float larghezza_device;
 
-    //Controlla che la larghezza del pistonesx sia minore di quella del cilindrosx
+    //Controlla che la larghezza del pistone sia minore di quella del cilindro 
+    //vale per entrambi i pistoni sx e dx
     while (inclinatore-> pistonesx-> lar >= inclinatore-> cilindrosx-> lar) {
-        cout << "ERRORE: larghezza pistone eccede larghezza cilindro, reinserire larghezza del pistone: ";
+        cout << "ERRORE: larghezza pistone " << inclinatore-> pistonesx-> lar 
+            << " eccede larghezza cilindro pari a: " << inclinatore-> cilindrosx-> lar 
+            << ", reinserire dato: ";
         cin >> new_param;
 
         set_larghezza_pistoni(inclinatore, new_param);
         controllo_dati(inclinatore);
     }
-
-/*  //Controlla che la larghezza(in tal caso altezza perchè ribaltato) del pistonedx sia minore di quella del cilindrodx
-    while (inclinatore-> pistonedx-> lar < inclinatore-> cilindrosx-> lar) {
-        cout << "Larghezza pistone deve essere minore della larghezza cilindro, reinserire larghezza del pistone: ";
-        cin >> new_param;
-
-        set_larghezza_pistoni(inclinatore, new_param);
-        controllo_dati(inclinatore);
-    }
-*/
 
     //Controlla che il device sia contenuto nel layout in direzione y
     altezza_device = inclinatore-> pistonesx -> r * 2 +
@@ -198,48 +199,52 @@ int coerenza_dati(PSInclinatore * inclinatore){
                      inclinatore-> cilindrosx -> h;
 
     //Se sconfina il layout, mi chiede di rinserire pos_y
-    while (inclinatore-> cilindrosx-> pos_y <= altezza_device 
-            || inclinatore-> cilindrosx-> pos_y > LAYOUT_HEIGHT) {
+    while (inclinatore-> cilindrosx-> pos_y < altezza_device 
+            || inclinatore-> cilindrosx-> pos_y < LAYOUT_HEIGHT) {
 
-        cout << "ERRORE: device posizionato in y supera layout_height, reinserire pos_y cilindro: ";
+        cout << "ERRORE: device posizionato in y supera layout_height, reinserire dato: ";
         cin >> new_param;
 
         set_posizioney_cilindro(inclinatore-> cilindrosx, new_param);
+        set_posizioney_cilindro(inclinatore-> cilindrodx, new_param);
         controllo_dati(inclinatore);
     }
 
     //Controlla che il device sia contenuto nel layout in direzione x
-    larghezza_device = DISTANZA_CILINDRI + H_CILINDRI;
+    larghezza_device = DISTANZA_CILINDRI + inclinatore-> cilindrodx -> lar;
 
     //Se sconfina il layout, mi chiede di rinserire pos_x
     while (inclinatore-> cilindrosx-> pos_x >= larghezza_device 
             || inclinatore-> cilindrosx-> pos_x > LAYOUT_WIDTH) {
 
-        cout << "ERRORE: device posizionato in x supera layout_width, reinserire pos_x cilindro: ";
+        cout << "ERRORE: device posizionato in x supera layout_width, reinserire dato: ";
         cin >> new_param;
 
         set_posizionex_cilindro(inclinatore-> cilindrosx, new_param);
+        set_posizionex_cilindro(inclinatore-> cilindrodx, new_param + inclinatore-> cilindrosx-> lar + DISTANZA_CILINDRI);
         controllo_dati(inclinatore);
     }
 
-    /* //Estensione del pistonesx non deve superare altezza cilindrosx
-    while (inclinatore-> pistonesx -> est > inclinatore-> cilindrosx-> h) {
-        cout << "Estensione pistone deve essere minore dell'altezza del cilindro, problema strutturale";
+    //Estensione del pistonesx non deve superare altezza cilindrosx
+    while (inclinatore-> pistonesx -> est >= inclinatore-> cilindrosx-> h) {
+        cout << "ERRORE: estensione pistonesx non deve eccedere altezza del cilindrosx, problema strutturale, reinserire angolo";
         cin >> new_param;
 
-        set_estensione();
+        set_angolo(inclinatore-> piano, new_param);
         controllo_dati(inclinatore);
     }
-    //??//Estensione del pistonedx non deve superare altezza (larghezza) cilindrodx
-    while (inclinatore-> pistonedx -> est > inclinatore-> cilindrodx-> h) {
-        cout << "Estensione pistone deve essere minore dell'altezza del cilindro, problema strutturale";
-        cin >> new_param;
-        controllo_dati(inclinatore);
-    }
-    */
 
+    //Estensione del pistonedx non deve superare altezza (larghezza) cilindrodx
+    while (inclinatore-> pistonedx -> est >= inclinatore-> cilindrodx-> h) {
+        cout << "ERRORE: Estensione pistonedx non deve eccedere larghezza del cilindrodx, problema strutturale, reinserire angolo: ";
+        cin >> new_param;
+
+        set_angolo(inclinatore-> piano, new_param);
+        controllo_dati(inclinatore);
+    }
+    
     //Controlla che il raggio delle coppie rotoidali sia minore o uguale allo spessore del piano
-    while (inclinatore-> pistonesx-> r >= inclinatore-> piano -> spes) {
+    while (inclinatore-> pistonesx-> r > inclinatore-> piano -> spes) {
         cout << "ERRORE: raggio delle coppie rotoidali eccede lo spessore del piano, reinserire un altro valore: ";
         cin >> new_param;
         set_raggi(inclinatore, new_param);
@@ -251,42 +256,60 @@ int coerenza_dati(PSInclinatore * inclinatore){
 
 void stampa_dati (PSInclinatore * inc){
     
-    cout << "Dati dell'inclinatore da stampare: "<< endl;
+    cout << endl << endl;
+    cout << "DATI DELL'INCLINATORE"<< endl;
 
-    cout << "Cilindri: \t\t "<< endl;
-    cout << "Posizione cilindro sx:  \t\t"<< "x: "<< inc-> cilindrosx-> pos_x <<  ", y: " << inc-> cilindrosx-> pos_y <<  endl;
+    cout << "Cilindri: "<< endl;
+    cout << "Posizione cilindro sx:  "<< "x: "<< inc-> cilindrosx-> pos_x <<  ", y: " << inc-> cilindrosx-> pos_y <<  endl;
     cout << "Cilindro sx: \t\t"<< "larghezza: "<< inc-> cilindrosx-> lar << ", altezza: " << inc-> cilindrosx-> h << endl;
-    cout << "Cilindro dx: \t\t" << "larghezza: "<< inc-> cilindrodx-> h << ", altezza: " << inc-> cilindrodx-> lar << endl;
+    cout << "Posizione cilindro dx:  "<< "x: "<< inc-> cilindrodx-> pos_x <<  ", y: " << inc-> cilindrodx-> pos_y <<  endl;
+    cout << "Cilindro dx: \t\t" << "larghezza: "<< inc-> cilindrodx-> lar << ", altezza: " << inc-> cilindrodx-> h << endl;
 
     cout << "Pistoni: \t\t " << endl;
     cout << "Pistone sx: \t\t"<< "larghezza: "<< inc-> pistonesx-> lar << ", estensione: " << inc-> pistonesx -> est << endl;
     cout << "Pistone dx: \t\t" << "larghezza: "<< inc-> pistonedx-> lar << ", estensione: " << inc-> pistonedx -> est << endl;
-    cout << "Coppie rotoidali: \t\t"<< "raggiosx: "<< inc-> pistonesx-> r << ", raggiodx: " << inc-> pistonedx-> r << endl;
+    cout << "Coppie rotoidali: \t"<< "raggiosx:  "<< inc-> pistonesx-> r << ", raggiodx: " << inc-> pistonedx-> r << endl;
     
     cout << "Piano: \t\t " << endl;
-    cout << "Angolo inclinazione: \t\t " << inc-> piano -> angolo <<  endl;
-    cout << "Spessore piano: \t\t " << inc-> piano-> spes << endl;
-    cout << "Lunghezza piano: \t\t" << inc-> piano-> l << endl;
+    cout << "Angolo inclinazione: \t" << inc-> piano -> angolo <<  endl;
+    cout << "Spessore piano: \t" << inc-> piano-> spes << endl;
+    cout << "Lunghezza piano: \t" << inc-> piano-> l << endl;
+
+}
+
+// Funzione di inizializzazione e implementazione del file svg
+void inclinatore_to_svg (PSInclinatore * myInc){
+
+    string fileName = "";
+    cout << "Inserire il nome del file .svg che verrà creato: "; cin >> fileName;
+
+    ofstream mySVG(fileName + ".svg");
+    mySVG << "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" << endl;
+    mySVG << "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"800\" height=\"600\">" << endl;
+    mySVG << inclinatore_to_stringasvg (myInc);
+    mySVG << "</svg>";
+    mySVG.close();
+
 }
 
 
-string inclinatore_to_svg (PSInclinatore * inc){
+string inclinatore_to_stringasvg (PSInclinatore * inc){
 
     string str = "";
     float x, y;
     float ipo, alpha, gamma;
 
     //Cilindro di sinistra
-    str += "<rect  x=\"" + to_string(inc-> cilindrosx-> pos_x) + "\" y=\"" + to_string(inc-> cilindrosx-> pos_y) + "\" width=\"" + to_string(inc-> cilindrosx-> lar) + "\" height=\"" + to_string(inc-> cilindrosx-> h) +  "\" style=\"fill:rgb(204,0,0);stroke-width:3;stroke:rgb(0,0,0)\" /> \n";
+    str += "<rect  x=\"" + to_string(inc-> cilindrosx-> pos_x) + "\" y=\"" + to_string(inc-> cilindrosx-> pos_y - inc-> cilindrosx-> h) + "\" width=\"" + to_string(inc-> cilindrosx-> lar) + "\" height=\"" + to_string(inc-> cilindrosx-> h) +  "\" style=\"fill:rgb(204,0,0);stroke-width:3;stroke:rgb(0,0,0)\" /> \n";
     
     //Pistone di sinistra
     x = inc-> cilindrosx-> pos_x + (inc-> cilindrosx-> lar - inc-> pistonesx-> lar) / 2;
-    y = inc-> cilindrosx-> pos_y - inc-> cilindrosx-> h;
+    y = inc-> cilindrosx-> pos_y - inc-> cilindrosx-> h - inc-> pistonesx-> est;
     str += "<rect  x=\"" + to_string(x) + "\" y=\"" + to_string(y) + "\" width=\"" + to_string(inc-> pistonesx-> lar) + "\" height=\"" + to_string(inc-> pistonesx-> est) +  "\" style=\"fill:rgb(255, 238, 204);stroke-width:3;stroke:rgb(0,0,0)\" /> \n";
     
     // Coppia rotoidale sx
     x = x + inc-> pistonesx-> lar / 2;
-    y = y - inc-> pistonesx-> est - inc-> pistonesx-> r;
+    y = y - inc-> pistonesx-> r;
     str += "<circle cx=\"" + to_string(x) + "\" cy=\"" + to_string(y) + "\" r=\"" + to_string(inc-> pistonesx-> r) + "\" stroke=\"black\" stroke-width=\"3\" fill=\"ffaa80\" /> \n";
     
     // Piano:
@@ -300,27 +323,26 @@ string inclinatore_to_svg (PSInclinatore * inc){
     str += "</g> \n";
 
     //Cilindro di destra
-    str += "<rect  x=\"" + to_string(inc-> cilindrodx-> pos_x) + "\" y=\"" + to_string(inc-> cilindrodx-> pos_y) + "\" width=\"" + to_string(inc-> cilindrodx-> lar) + "\" height=\"" + to_string(inc-> cilindrodx-> h) +  "\" style=\"fill:rgb(204,0,0);stroke-width:3;stroke:rgb(0,0,0)\" /> \n";
+    str += "<rect  x=\"" + to_string(inc-> cilindrodx-> pos_x) + "\" y=\"" + to_string(inc-> cilindrodx-> pos_y - inc-> cilindrodx-> h) + "\" width=\"" + to_string(inc-> cilindrodx-> lar) + "\" height=\"" + to_string(inc-> cilindrodx-> h) +  "\" style=\"fill:rgb(204,0,0);stroke-width:3;stroke:rgb(0,0,0)\" /> \n";
     
     //Pistone di destra
     x = inc-> cilindrodx-> pos_x - inc-> pistonedx-> est;
-    y = inc-> cilindrodx-> pos_y - (inc-> cilindrodx-> h - inc-> pistonedx-> lar) / 2;
+    y = inc-> cilindrodx-> pos_y - inc-> pistonedx-> lar - (inc-> cilindrodx-> h - inc-> pistonedx-> lar) / 2;
     str += "<rect  x=\"" + to_string(x) + "\" y=\"" + to_string(y) + "\" width=\"" + to_string(inc-> pistonedx-> est) + "\" height=\"" + to_string(inc-> pistonedx-> lar) +  "\" style=\"fill:rgb(255, 238, 204);stroke-width:3;stroke:rgb(0,0,0)\" /> \n";
 
     // Coppia rotoidale dx
     x = x - inc-> pistonedx-> r;
-    y = y - inc-> pistonedx-> lar / 2;
+    y = y + inc-> pistonedx-> lar / 2;
     str += "<circle cx=\"" + to_string(x) + "\" cy=\"" + to_string(y) + "\" r=\"" + to_string(inc-> pistonedx-> r) + "\" stroke=\"black\" stroke-width=\"3\" fill=\"ffaa80\" /> \n";
-     
+       
     return str;
 }
 
 
 
 
-/*
 //Funzione che permette di deallocare correttamente struct e istanze
-void inclinatore_cancella (PSInclinatore * inclinatore) {
+void inclinatore_destroy (PSInclinatore * inclinatore) {
 
     delete inclinatore-> cilindrosx;
     delete inclinatore-> cilindrodx;
@@ -328,4 +350,3 @@ void inclinatore_cancella (PSInclinatore * inclinatore) {
     delete inclinatore-> pistonedx;
     delete inclinatore-> piano;
 }
-*/
