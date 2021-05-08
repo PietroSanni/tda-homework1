@@ -8,7 +8,7 @@
     #define H_CILINDRI  200
     #define L_PIANO  500
     #define SPESSORE  20
-    #define DISTANZA_CILINDRI 440
+    #define DISTANZA_CILINDRI 500
     #define LAYOUT_WIDTH 800
     #define LAYOUT_HEIGHT 600
     
@@ -52,6 +52,8 @@
         float angolo;
         float spes;
         float l;
+        float posx;
+        float posy;
     };
 
 
@@ -151,6 +153,15 @@
      * Dato il nome del file dall'utente, la funzione realizza la stringa svg
      */ 
     void inclinatore_to_svg (PSInclinatore * inc);
+
+
+    /*
+     * Posizione x,y del vertice alto a sinistra del piano inclinato
+     * calcolata all'inerno di inclinatore_to_stringasvg.
+     * Necessaria, per comodità per stampare le misure del device
+     */
+    void set_piano_posx(PSPiano * piano, float x);
+    void set_piano_posy(PSPiano * piano, float y);
 
 
     /*
