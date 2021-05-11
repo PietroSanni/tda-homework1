@@ -9,6 +9,7 @@
 #include <sstream>
 #include <algorithm>
 #include <vector>
+#include <iomanip>
 
 using namespace std;
 
@@ -297,13 +298,24 @@ void stampa_dati (PSInclinatore * inc){
 void inclinatore_to_svg (PSInclinatore * myInc){
 
     string fileName = "";
-    cout << "Inserire il nome del file .svg che verrà creato: "; cin >> fileName;
+    char misure;
+
+    cout << "Inserire il nome del file .svg che verrà creato: "; 
+    cin >> fileName;
+    cout << endl << "Visualizzare le misure dei parametri del device? (Y/N): ";
+    cin >> misure;
     cout << endl;
 
     ofstream mySVG(fileName + ".svg");
     mySVG << "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" << endl;
     mySVG << "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"" << LAYOUT_WIDTH << "\" height=\"" << LAYOUT_HEIGHT << "\">" << endl;
     mySVG << inclinatore_to_stringasvg (myInc);
+
+    if (misure == 'Y') {
+
+        mySVG << inclinatore_to_misureSVG (myInc);
+    }
+    
     mySVG << "</svg>";
     mySVG.close();
 }
@@ -362,6 +374,7 @@ string inclinatore_to_stringasvg (PSInclinatore * inc){
     return str;
 }
 
+
 void set_piano_posx(PSPiano * piano, float x) {
     piano-> posx = x;
 }
@@ -369,7 +382,85 @@ void set_piano_posy(PSPiano * piano, float y) {
     piano-> posy = y;
 }
 
-    //Faccio le misure e ho già x e y
+
+//Funzione per rimuovere le cifre decimali
+string myValue (float f){
+    stringstream ss;
+    ss << fixed << setprecision(0) <<  f;
+    
+    return ss.str();
+}
+
+
+/* Funzione che sviluppa la stringa di misure 
+ * i valori di x y per il piano possono essere richiamati 
+ * tramite set_piano_sx e set_piano_dx
+*/
+string inclinatore_to_misureSVG (PSInclinatore * inc){
+
+    string str = "";
+
+    float x, y;
+    
+    //MISURA: altezza cilindro sx
+    x = inc->cilindrosx->pos_x;
+    y = inc->cilindrosx->pos_y - inc->cilindrosx->h;
+    str += "<rect x=\"" + to_string(x - 10) + "\" y=\"" + to_string(y) + "\" width=\"0.1\" height=\"" + to_string(inc->cilindrosx->h) + "\" style=\"fill:rgb(0, 0, 0);stroke-width:1;stroke:rgb(0, 0, 0)\" /> \n";
+    str += "<text x=\"" + to_string(x - 32) + "\" y=\"" + to_string(y + inc->cilindrosx->h / 2) + "\" fill=\"black\">" + myValue(inc->cilindrosx->h) + "</text>\n";
+
+    //MISURA: larghezza cilindro sx
+    str += "<rect x=\"" + to_string(x) + "\" y=\"" + to_string(inc->cilindrosx->pos_y + 10) + "\" width=\"" + to_string(inc->cilindrosx->lar) + "\" height=\"0.1\"" + " style=\"fill:rgb(0, 0, 0);stroke-width:1;stroke:rgb(0, 0, 0)\" /> \n";
+    str += "<text x=\"" + to_string(x + (inc->cilindrosx->lar)/3) + "\" y=\"" + to_string(inc->cilindrosx->pos_y + 25) + "\" fill=\"black\">" + myValue(inc->cilindrosx->lar) + "</text>";
+    
+    //MISURA: distanza cilindri
+    str += "<rect x=\"" + to_string(x) + "\" y=\"" + to_string(inc->cilindrosx->pos_y + 5) + "\" width=\"" + to_string(DISTANZA_CILINDRI) + "\" height=\"0.1\"" + " style=\"fill:rgb(0, 0, 0);stroke-width:1;stroke:rgb(0, 0, 0)\" /> \n";
+    str += "<text x=\"" + to_string(x + DISTANZA_CILINDRI / 2) + "\" y=\"" + to_string(inc->cilindrosx->pos_y + 20) + "\" fill=\"black\">" + myValue(DISTANZA_CILINDRI) + "</text>";
+    
+    //MISURA: estensione pistone sx
+    y = y - inc->pistonesx->est;
+    str += "<rect x=\"" + to_string(x) + "\" y=\"" + to_string(y) + "\" width=\"0.1\" height=\"" + to_string(inc->pistonesx->est) + "\" style=\"fill:rgb(0, 0, 0);stroke-width:1;stroke:rgb(0, 0, 0)\" /> \n";
+    str += "<text x=\"" + to_string(x - 20) + "\" y=\"" + to_string(y + inc->pistonesx->est / 2) + "\" fill=\"black\">" + myValue(inc->pistonesx->est) + "</text>";
+ 
+    //MISURA: larghezza pistone sx
+    x = x + (inc->cilindrosx->lar - inc->pistonesx->lar) / 2;
+    y = inc->cilindrosx->pos_y - inc->cilindrosx->h;
+    str += "<rect x=\"" + to_string(x) + "\" y=\"" + to_string(y + 10) + "\" width=\"" + to_string(inc->pistonesx->lar) + "\" height=\"0.1\"" + " style=\"fill:rgb(0, 0, 0);stroke-width:1;stroke:rgb(0, 0, 0)\" /> \n";
+    str += "<text x=\"" + to_string(x) + "\" y=\"" + to_string(y + 25) + "\" fill=\"black\">" + myValue(inc->pistonesx->lar) + "</text>";
+    
+    //MISURA: raggio coppia rotoidale sx
+    x = inc->cilindrosx->pos_x + inc->cilindrosx->lar / 2;
+    y = y - inc->pistonesx->est - inc->pistonesx->r * 2;
+    str += "<rect x=\"" + to_string(x) + "\" y=\"" + to_string(y - 10) + "\" width=\"" + to_string(inc->pistonesx->r) + "\" height=\"0.1\"" + " style=\"fill:rgb(0, 0, 0);stroke-width:1;stroke:rgb(0, 0, 0)\" /> \n";
+    str += "<text x=\"" + to_string(x + 2) + "\" y=\"" + to_string(y - 15) + "\" fill=\"black\">" + myValue(inc->pistonesx->r) + "</text>";
+    
+    //MISURA: larghezza cilindro dx
+    x = inc->cilindrosx->pos_x + DISTANZA_CILINDRI;
+    y = inc->cilindrosx->pos_y;
+    str += "<rect x=\"" + to_string(x) + "\" y=\"" + to_string(y + 20) + "\" width=\"" + to_string(inc->cilindrodx->lar) + "\" height=\"0.1\"" + " style=\"fill:rgb(0, 0, 0);stroke-width:1;stroke:rgb(0, 0, 0)\" /> \n";
+    str += "<text x=\"" + to_string(x + (inc->cilindrodx->lar)/2 - 10) + "\" y=\"" + to_string(y + 35) + "\" fill=\"black\">" + myValue(inc->cilindrodx->lar) + "</text>";
+    
+    //MISURA: estensione pistone dx
+    x = x - inc->pistonedx->est;
+    str += "<rect x=\"" + to_string(x) + "\" y=\"" + to_string(y + 15) + "\" width=\"" + to_string(inc->pistonedx->est) + "\" height=\"0.1\"" + " style=\"fill:rgb(0, 0, 0);stroke-width:1;stroke:rgb(0, 0, 0)\" /> \n";
+    str += "<text x=\"" + to_string(x + (inc->pistonedx->est)/2 - 5) + "\" y=\"" + to_string(y + 30) + "\" fill=\"black\">" + myValue(inc->pistonedx->est) + "</text>";
+    
+    //MISURA: raggio coppia rotoidale dx
+    x = x - inc->pistonedx->r;
+    str += "<rect x=\"" + to_string(x) + "\" y=\"" + to_string(y + 10) + "\" width=\"" + to_string(inc->pistonedx->r) + "\" height=\"0.1\"" + " style=\"fill:rgb(0, 0, 0);stroke-width:1;stroke:rgb(0, 0, 0)\" /> \n";
+    str += "<text x=\"" + to_string(x + 2) + "\" y=\"" + to_string(y + 25) + "\" fill=\"black\">" + myValue(inc->pistonedx->r) + "</text>";
+
+   
+    //MISURA: piano inclinato
+    x = inc->piano->posx + 10;
+    y = inc->piano->posy - 10;
+    str += "<g transform=\"rotate(" + to_string(inc->piano->angolo) + "," + to_string(x) + "," + to_string(y) + ")\"> \n";
+    str += "<rect x=\"" + to_string(x) + "\" y=\"" + to_string(y) + "\" width=\"" + to_string(inc->piano->l) + "\" height=\"0.1\"" + " style=\"fill:rgb(0, 0, 0));stroke-width:1;stroke:rgb(0,0,0)\" /> \n";
+    str += "<text x=\"" + to_string(x + (inc->piano->l / 2)) + "\" y=\"" + to_string(y - 10) + "\" fill=\"black\">" + myValue(inc->piano->l) + "</text>\n";
+    str += "</g> \n";
+
+    return str;
+}
+
 
 //Funzione che permette di deallocare correttamente struct e istanze
 void inclinatore_destroy (PSInclinatore * inclinatore) {

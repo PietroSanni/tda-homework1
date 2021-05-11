@@ -3,6 +3,7 @@
 
     #include<iostream>
 
+
     /*define di alcuni parametri tenuti costanti*/
     #define LAR_CILINDRI  40
     #define H_CILINDRI  200
@@ -28,6 +29,7 @@
         float lar;
     };
 
+
     /*
     * Definizione dei parametri del componente "pistone":
     * @param est = estensione del pistone;
@@ -41,11 +43,14 @@
         float r;
     };
 
+
     /*
     * Definizione dei parametri del componente "piano":
     * @param angolo = angolo di inclinazione del piano;
     * @param spes = spessore del piano;
     * @param l = lunghezza del piano;
+    * @param posx = coordinatax del piano inclinato dello spigolo in alto a sx;
+    * @param posy = coordinatay del piano inclinato dello spigolo in alto a sx;
     */
     struct PSPiano{
     
@@ -75,10 +80,12 @@
      */
     PSInclinatore * inclinatore_init(float posx_sx, float posy_sx, float lar_pi, float r, float rad);
 
+
     /*
      * Funzione che istanzia e inizializza i componenti "cilindro"
      */
     PSCilindro * cilindro_init(float posx, float posy, float h_ci, float lar_ci);
+
 
     /*
      * Funzione che istanzia e inizializza i componenti "pistone"
@@ -90,6 +97,7 @@
      * Funzione che istanzia e inizializza il componente "piano"
      */
     PSPiano * piano_init(float rad, float spessore, float lunghezza); 
+
 
     /*
      * Funzione che permette di creare da terminale il mio device, l'inclinatore
@@ -118,6 +126,7 @@
     void set_posizionex_cilindro(PSCilindro * cilindro, float new_param);
     void set_angolo (PSPiano * pian, float new_param);
     void set_estensione(PSPistone * pist, float new_param);
+
 
     /*
      * Funzione che controlla che i parametri inseriti siano positivi e diversi da zero.
@@ -162,6 +171,13 @@
      */
     void set_piano_posx(PSPiano * piano, float x);
     void set_piano_posy(PSPiano * piano, float y);
+
+
+    /*
+     * Funzione che se chiamata, implementare all'interno del file svg
+     * le misure dei componenti del device
+     */
+    std::string inclinatore_to_misureSVG (PSInclinatore * inc);
 
 
     /*
