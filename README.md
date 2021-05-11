@@ -13,6 +13,7 @@ Schema del meccanismo prototipo `my-inclinatore.svg`
 2. Il programma verifica che tali valori inseriti siano:
 	1. Coerenti fisicamente (positivi e non nulli);
    	2. Coerenti con i componenti del device;
+   	
 	(nel caso di mancata coerenza, viene chiesto di reinserire i valori)
 3. Il programma stampa i dati inseriti;
 4. L'utente sceglie il nome del file .svg contenente il device creato;
