@@ -80,11 +80,11 @@ PSInclinatore * inclinatore_input(){
     
     cout << endl;
     cout << "CREA L'INCLINATORE" << endl;
-    cout << "Inserire posizione x del cilindro sx:   "; cin >> posx_sx;
-    cout << "Inserire posizione y del cilindro sx:   "; cin >> posy_sx;
-    cout << "Inserire larghezza dei pistoni sx e dx: "; cin >> lar_pi;
-    cout << "Inserire raggio delle coppie rotoidali: "; cin >> r;
-    cout << "Inserire l'angolo di inclinazione:      "; cin >> rad;
+    cout << "  Inserire posizione x del cilindro sx:   "; cin >> posx_sx;
+    cout << "  Inserire posizione y del cilindro sx:   "; cin >> posy_sx;
+    cout << "  Inserire larghezza dei pistoni sx e dx: "; cin >> lar_pi;
+    cout << "  Inserire raggio delle coppie rotoidali: "; cin >> r;
+    cout << "  Inserire l'angolo di inclinazione:      "; cin >> rad;
 
     cout << endl;
 
@@ -167,11 +167,13 @@ int controllo_dati(PSInclinatore * inclinatore){
         cin >> new_param;
         set_larghezza_pistoni(inclinatore, new_param);
     }
+
     while (inclinatore-> pistonesx-> r <= 0) {
         cout << "Raggio delle coppie rotoidali non valido, inserire un valore positivo: ";
         cin >> new_param;
         set_raggi(inclinatore, new_param);
     }
+    
     while (inclinatore-> piano-> angolo <= 0) {
         cout << "Angolo di inclinazione piano non valido, inserire un valore positivo: ";
         cin >> new_param;
@@ -191,7 +193,8 @@ int coerenza_dati(PSInclinatore * inclinatore){
       
     //Controlla che il raggio delle coppie rotoidali sia minore o uguale allo spessore del piano
     while (inclinatore-> pistonesx-> r > inclinatore-> piano -> spes) {
-        cout << "ERRORE: raggio delle coppie rotoidali eccede lo spessore del piano, reinserire un altro valore: ";
+        cout << "ERRORE: raggio delle coppie rotoidali pari a: " << inclinatore-> pistonesx-> r
+                << ", eccede lo spessore del piano (" << inclinatore-> piano -> spes << "), reinserire valore: ";
         cin >> new_param;
         set_raggi(inclinatore, new_param);
         controllo_dati(inclinatore);
@@ -202,8 +205,7 @@ int coerenza_dati(PSInclinatore * inclinatore){
     //vale per entrambi i pistoni sx e dx
     while (inclinatore->pistonesx->lar >= inclinatore->cilindrosx->lar) {
         cout << "ERRORE: larghezza pistone " << inclinatore->pistonesx->lar 
-            << " eccede larghezza cilindro pari a: " << inclinatore->cilindrosx->lar 
-            << ", reinserire dato: ";
+                << ", eccede larghezza cilindro pari a: " << inclinatore->cilindrosx->lar << ", reinserire dato: ";
         cin >> new_param;
 
         set_larghezza_pistoni(inclinatore, new_param);
@@ -223,8 +225,8 @@ int coerenza_dati(PSInclinatore * inclinatore){
     while (esx < 0 || edx < 0
             || esx >= inclinatore->cilindrosx->h
             || edx >= inclinatore->cilindrodx->lar) {
-        cout << "ERRORE: estensione non valida (sx = " << esx
-             << ", dx = " << edx << "), reinserire l'angolo: ";
+        cout << "ERRORE: estensione pistoni non valida (sx = " << esx
+             << ", dx = " << edx << "), inserire un nuovo angolo: ";
         cin >> new_param;
 
         set_angolo(inclinatore->piano, new_param); 
@@ -246,7 +248,8 @@ int coerenza_dati(PSInclinatore * inclinatore){
     while (inclinatore-> cilindrosx-> pos_y < altezza_device 
             || inclinatore-> cilindrosx-> pos_y > LAYOUT_HEIGHT) {
 
-        cout << "ERRORE: device posizionato in y = " << inclinatore-> cilindrosx-> pos_y <<", supera layout_height (" << LAYOUT_HEIGHT<<") reinserire dato: ";
+        cout << "ERRORE: device posizionato in y = " << inclinatore-> cilindrosx-> pos_y 
+                << ", supera layout_height (" << LAYOUT_HEIGHT<< ") reinserire dato: ";
         cin >> new_param;
 
         set_posizioney_cilindro(inclinatore-> cilindrosx, new_param);
@@ -260,7 +263,8 @@ int coerenza_dati(PSInclinatore * inclinatore){
     //Se sconfina il layout, mi chiede di rinserire pos_x
     while (inclinatore-> cilindrosx-> pos_x + larghezza_device > LAYOUT_WIDTH) {
 
-        cout << "ERRORE: device posizionato in x supera layout_width, reinserire dato: ";
+        cout << "ERRORE: device posizionato in x = " << inclinatore-> cilindrosx-> pos_x
+                << ", supera layout_width (" << LAYOUT_WIDTH << "), reinserire dato: ";
         cin >> new_param;
 
         set_posizionex_cilindro(inclinatore-> cilindrosx, new_param);
@@ -276,20 +280,20 @@ void stampa_dati (PSInclinatore * inc){
     cout << "DATI DELL'INCLINATORE"<< endl;
 
     cout << "Cilindri: "<< endl;
-    cout << "Posizione cilindro sx:  "<< "x: "<< inc-> cilindrosx-> pos_x <<  ", y: " << inc-> cilindrosx-> pos_y <<  endl;
-    cout << "Cilindro sx: \t\t"<< "larghezza: "<< inc-> cilindrosx-> lar << ", altezza: " << inc-> cilindrosx-> h << endl;
-    cout << "Posizione cilindro dx:  "<< "x: "<< inc-> cilindrodx-> pos_x <<  ", y: " << inc-> cilindrodx-> pos_y <<  endl;
-    cout << "Cilindro dx: \t\t" << "larghezza: "<< inc-> cilindrodx-> lar << ", altezza: " << inc-> cilindrodx-> h << endl;
+    cout << "  Cilindro sx:\t\t"<< "posizionex: "<< inc-> cilindrosx-> pos_x <<  ",  posizioney: " << inc-> cilindrosx-> pos_y <<  endl;
+    cout << "  Cilindro sx:\t\t"<< "larghezza:  "<< inc-> cilindrosx-> lar << ",  altezza: " << inc-> cilindrosx-> h << endl;
+    cout << "  Cilindro dx:\t\t"<< "posizionex: "<< inc-> cilindrodx-> pos_x <<  ", posizioney: " << inc-> cilindrodx-> pos_y <<  endl;
+    cout << "  Cilindro dx:\t\t"<< "larghezza:  "<< inc-> cilindrodx-> lar << ", altezza: " << inc-> cilindrodx-> h << endl;
 
     cout << "Pistoni: \t\t " << endl;
-    cout << "Pistone sx: \t\t"<< "larghezza: "<< inc-> pistonesx-> lar << ", estensione: " << inc-> pistonesx -> est << endl;
-    cout << "Pistone dx: \t\t" << "larghezza: "<< inc-> pistonedx-> lar << ", estensione: " << inc-> pistonedx -> est << endl;
-    cout << "Coppie rotoidali: \t"<< "raggiosx:  "<< inc-> pistonesx-> r << ", raggiodx: " << inc-> pistonedx-> r << endl;
+    cout << "  Pistone sx:\t\t"<< "larghezza: "<< inc-> pistonesx-> lar << ", estensione: " << inc-> pistonesx -> est << endl;
+    cout << "  Pistone dx:\t\t"<< "larghezza: "<< inc-> pistonedx-> lar << ", estensione: " << inc-> pistonedx -> est << endl;
+    cout << "  Coppie rotoidali:\t"<< "raggiosx:  "<< inc-> pistonesx-> r << ", raggiodx: " << inc-> pistonedx-> r << endl;
     
     cout << "Piano: \t\t " << endl;
-    cout << "Angolo inclinazione: \t" << inc-> piano -> angolo <<  endl;
-    cout << "Spessore piano: \t" << inc-> piano-> spes << endl;
-    cout << "Lunghezza piano: \t" << inc-> piano-> l << endl;
+    cout << "  Angolo inclinazione:\t" << inc-> piano -> angolo <<  endl;
+    cout << "  Spessore piano:\t" << inc-> piano-> spes << endl;
+    cout << "  Lunghezza piano:\t" << inc-> piano-> l << endl;
 
     cout << endl;
 }
@@ -449,7 +453,6 @@ string inclinatore_to_misureSVG (PSInclinatore * inc){
     str += "<rect x=\"" + to_string(x) + "\" y=\"" + to_string(y + 10) + "\" width=\"" + to_string(inc->pistonedx->r) + "\" height=\"0.1\"" + " style=\"fill:rgb(0, 0, 0);stroke-width:1;stroke:rgb(0, 0, 0)\" /> \n";
     str += "<text x=\"" + to_string(x + 2) + "\" y=\"" + to_string(y + 25) + "\" fill=\"black\">" + myValue(inc->pistonedx->r) + "</text>";
 
-   
     //MISURA: piano inclinato
     x = inc->piano->posx + 10;
     y = inc->piano->posy - 10;
